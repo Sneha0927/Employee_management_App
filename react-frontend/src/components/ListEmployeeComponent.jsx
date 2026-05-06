@@ -26,6 +26,17 @@ class ListEmployeeComponent extends Component {
     }
 
     componentDidMount(){
+        this.loadEmployees();
+    }
+
+    componentDidUpdate(prevProps){
+        // Refresh list when returning from add/edit page
+        if(this.props.location !== prevProps.location){
+            this.loadEmployees();
+        }
+    }
+
+    loadEmployees(){
         EmployeeService.getEmployees().then((res) => {
             this.setState({ employees: res.data});
         });
