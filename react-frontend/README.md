@@ -1,68 +1,95 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# ⚛️ TeamFlow Frontend: React.js SPA
 
-## Available Scripts
+This is the frontend client for **TeamFlow**, an interactive, single-page Employee Management application. Built with **React.js (v16.13.1)** and styled using **Bootstrap 4**, it consumes the REST endpoints exposed by the Spring Boot backend to manage workforce directory details with a responsive interface.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🛠️ Tech Stack & Key Modules
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+-   **React.js 16.13.1:** Employs component-oriented architecture (class components) with modular states.
+-   **React Router DOM 5.2.0:** Manages dynamic client-side SPA routing (`BrowserRouter`, `Switch`, `Route`).
+-   **Axios:** Executes high-performance Promise-based HTTP calls, managing request payloads and response states asynchronously.
+-   **Bootstrap 4.5.0:** Integrates clean grid layouts, styling configurations, buttons, and form inputs.
+-   **cross-env:** Seamlessly sets system environment variables across platforms (Windows, macOS, Linux).
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+## 📂 Source Code structure
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```directory
+src/
+├── components/
+│   ├── HeaderComponent.js         # Top navigation header bar
+│   ├── FooterComponent.jsx        # Footer layout with copyright notes
+│   ├── ListEmployeeComponent.jsx  # Main view showing list of employees in a table
+│   ├── CreateEmployeeComponent.jsx# Dual-purpose form to Add or Update employees
+│   ├── ViewEmployeeComponent.jsx  # Card layout view for individual employee details
+│   └── UpdateEmployeeComponent.jsx# Deprecated update view (consolidated into CreateEmployeeComponent)
+│
+├── services/
+│   └── EmployeeService.js         # Unified client layer mapping API CRUD actions with Axios
+│
+├── App.js                         # Router setup and page routing mapping
+└── index.js                       # Render root configuration
+```
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🏗️ Technical Highlights
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### 1. Dual-Purpose Components (`CreateEmployeeComponent.jsx`)
+Rather than creating separate views, the component detects if it is in "create" or "edit" mode using route parameters:
+-   `/add-employee/_add` ➡️ Starts with empty fields for creation.
+-   `/add-employee/:id` ➡️ Triggers a lifecycle hook `componentDidMount()` to fetch existing employee data via `EmployeeService.getEmployeeById(id)` and populates form fields for updates.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. Service Encapsulation (`EmployeeService.js`)
+API interactions are isolated from UI components. This layer manages base REST URLs (`http://localhost:8080/api/v1/employees`) and exposes reusable methods:
+```javascript
+getEmployees()
+createEmployee(employee)
+getEmployeeById(employeeId)
+updateEmployee(employee, employeeId)
+deleteEmployee(employeeId)
+```
 
-### `npm run eject`
+### 3. Node v17+ Compatibility
+To support modern Node runtimes (like Node.js v18/v20/v24), we configure `cross-env` with `NODE_OPTIONS=--openssl-legacy-provider` in the execution scripts. This instructs Node to bypass OpenSSL 3.x strict cryptographic defaults, which are incompatible with older Webpack compiler setups.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## ⚙️ Quick Start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 1. Prerequisites
+- **Node.js** (v18+)
+- **npm** (v9+)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### 2. Environment Setup
+Create a `.env` or set configurations in `src/services/EmployeeService.js` to target the Spring Boot endpoint. By default:
+```javascript
+const EMPLOYEE_API_BASE_URL = "http://localhost:8080/api/v1/employees";
+```
 
-## Learn More
+### 3. Build and Run Commands
+- **Install Dependencies:**
+  ```bash
+  npm install
+  ```
+- **Run the local Development Server:**
+  ```bash
+  npm start
+  ```
+  The server starts at `http://localhost:3000`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Compile and Build for Production:**
+  ```bash
+  npm run build
+  ```
+  Compiles production-ready bundle output to the `build/` directory.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## 🛡️ Role-Based Key Competencies (Frontend Focus)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+*   **SPA Routing:** Structuring nested routing systems with clean parameters and clean navigation lifecycle management.
+*   **State Management:** State segregation using local state variables, prop extraction, and event handling hooks.
+*   **API Integration:** Asynchronous communication handling with API wrapper models.
